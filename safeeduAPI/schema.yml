@@ -1,0 +1,429 @@
+openapi: 3.0.3
+info:
+  title: SafeEdu API
+  version: 1.0.0
+  description: '...'
+  contact:
+    name: GregMaster
+    email: prof.gregorio.queiroz@gmail.com
+  license:
+    name: MIT
+paths:
+  /api/auth/:
+    post:
+      operationId: auth_create
+      description: Autentica um usuário e retorna um JWT.
+      summary: Realizar Login
+      tags:
+      - Autenticação
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LoginRequest'
+            examples:
+              Login:
+                value:
+                  username: admin
+                  password: '123456'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/LoginRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/LoginRequest'
+        required: true
+      security:
+      - BearerAuth: []
+      responses:
+        '200':
+          description: No response body
+  /api/comentarios/:
+    get:
+      operationId: comentarios_list
+      description: Adiciona um comentário para uma escola.
+      summary: Cadastrar Comentário
+      tags:
+      - Comentários
+      security:
+      - jwtAuth: []
+      - BearerAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Comentario'
+          description: ''
+    post:
+      operationId: comentarios_create
+      description: Adiciona um comentário para uma escola.
+      summary: Cadastrar Comentário
+      tags:
+      - Comentários
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ComentarioRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/ComentarioRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/ComentarioRequest'
+        required: true
+      security:
+      - jwtAuth: []
+      - BearerAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Comentario'
+          description: ''
+  /api/comentarios/{id}/:
+    get:
+      operationId: comentarios_retrieve
+      description: Adiciona um comentário para uma escola.
+      summary: Cadastrar Comentário
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: Um valor inteiro único que identifica este comentario.
+        required: true
+      tags:
+      - Comentários
+      security:
+      - jwtAuth: []
+      - BearerAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Comentario'
+          description: ''
+  /api/comentarios/escola/{id_escola}/:
+    get:
+      operationId: comentarios_escola_retrieve
+      description: Adiciona um comentário para uma escola.
+      summary: Cadastrar Comentário
+      parameters:
+      - in: path
+        name: id_escola
+        schema:
+          type: string
+          pattern: ^\d+$
+        required: true
+      tags:
+      - Comentários
+      security:
+      - jwtAuth: []
+      - BearerAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Comentario'
+          description: ''
+  /api/escolas/:
+    get:
+      operationId: escolas_list
+      description: Retorna todas as escolas cadastradas.
+      summary: Listar Escolas
+      tags:
+      - Escolas
+      security:
+      - jwtAuth: []
+      - BearerAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Escola'
+          description: ''
+  /api/escolas/{id}/:
+    get:
+      operationId: escolas_retrieve
+      description: Retorna todas as escolas cadastradas.
+      summary: Listar Escolas
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: Um valor inteiro único que identifica este Escola.
+        required: true
+      tags:
+      - Escolas
+      security:
+      - jwtAuth: []
+      - BearerAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Escola'
+          description: ''
+  /api/imagens/:
+    get:
+      operationId: imagens_list
+      tags:
+      - Prints
+      security:
+      - jwtAuth: []
+      - BearerAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Imagem'
+          description: ''
+    post:
+      operationId: imagens_create
+      tags:
+      - Prints
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ImagemRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/ImagemRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/ImagemRequest'
+        required: true
+      security:
+      - jwtAuth: []
+      - BearerAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Imagem'
+          description: ''
+  /api/imagens/{id}/:
+    get:
+      operationId: imagens_retrieve
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: Um valor inteiro único que identifica este Imagem (print) associada
+          a um usuário.
+        required: true
+      tags:
+      - Prints
+      security:
+      - jwtAuth: []
+      - BearerAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Imagem'
+          description: ''
+  /api/imagens/usuario/{email}/:
+    get:
+      operationId: imagens_usuario_retrieve
+      parameters:
+      - in: path
+        name: email
+        schema:
+          type: string
+          pattern: ^.+$
+        required: true
+      tags:
+      - Prints
+      security:
+      - jwtAuth: []
+      - BearerAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Imagem'
+          description: ''
+  /api/motd/:
+    get:
+      operationId: motd_retrieve
+      description: Retorna uma mensagem motivacional aleatória.
+      summary: Mensagem motivacional
+      tags:
+      - MOTD
+      security:
+      - jwtAuth: []
+      - BearerAuth: []
+      responses:
+        '200':
+          description: No response body
+  /api/validate_token/:
+    get:
+      operationId: validate_token_retrieve
+      description: Verifica se o token JWT é válido.
+      summary: Validar Token
+      tags:
+      - Autenticação
+      security:
+      - jwtAuth: []
+      - BearerAuth: []
+      responses:
+        '200':
+          description: Token válido
+        '401':
+          description: Token inválido
+components:
+  schemas:
+    Comentario:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        autor_nome:
+          type: string
+          readOnly: true
+        comentario:
+          type: string
+        data_hora:
+          type: string
+          format: date-time
+          readOnly: true
+        escola:
+          type: integer
+        autor:
+          type: integer
+        resposta:
+          type: integer
+          nullable: true
+      required:
+      - autor
+      - autor_nome
+      - comentario
+      - data_hora
+      - escola
+      - id
+    ComentarioRequest:
+      type: object
+      properties:
+        comentario:
+          type: string
+          minLength: 1
+        escola:
+          type: integer
+        autor:
+          type: integer
+        resposta:
+          type: integer
+          nullable: true
+      required:
+      - autor
+      - comentario
+      - escola
+    Escola:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        nome:
+          type: string
+          maxLength: 200
+        avaliacao:
+          type: integer
+          maximum: 10
+          minimum: 0
+        image:
+          type: string
+          format: uri
+        latitude:
+          type: number
+          format: double
+        longitude:
+          type: number
+          format: double
+      required:
+      - avaliacao
+      - id
+      - image
+      - latitude
+      - longitude
+      - nome
+    Imagem:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        email_user:
+          type: string
+          format: email
+          readOnly: true
+        data_upload:
+          type: string
+          format: date-time
+          readOnly: true
+        imagem:
+          type: string
+          format: uri
+        usuario:
+          type: integer
+      required:
+      - data_upload
+      - email_user
+      - id
+      - imagem
+      - usuario
+    ImagemRequest:
+      type: object
+      properties:
+        imagem:
+          type: string
+          format: binary
+        usuario:
+          type: integer
+      required:
+      - imagem
+      - usuario
+    LoginRequest:
+      type: object
+      properties:
+        username:
+          type: string
+          minLength: 1
+        password:
+          type: string
+          writeOnly: true
+          minLength: 1
+      required:
+      - password
+      - username
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+    jwtAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT

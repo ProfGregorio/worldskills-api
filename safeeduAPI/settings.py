@@ -57,53 +57,136 @@ INSTALLED_APPS = [
     'corsheaders',
 
 ]
-
 REST_FRAMEWORK = {
-    # Use Django's standard `django.contrib.auth` permissions,
-    # or allow read-only access for unauthenticated users.
-    # "DEFAULT_PERMISSION_CLASSES": [
-    #     "rest_framework.permissions.DjangoModelPermissionsOrAnonReadOnly"
-    # ],
-    'DEFAULT_AUTHENTICATION_CLASSES': (
-        'rest_framework_simplejwt.authentication.JWTAuthentication',
-    ),
 
-    'DEFAULT_PERMISSION_CLASSES': (
-        #'rest_framework.permissions.IsAuthenticated',
-       'rest_framework.permissions.AllowAny',
+    "DEFAULT_SCHEMA_CLASS":
+        "drf_spectacular.openapi.AutoSchema",
+
+    "DEFAULT_AUTHENTICATION_CLASSES": (
+
+        "rest_framework_simplejwt.authentication.JWTAuthentication",
 
     ),
 
-    'DEFAULT_SCHEMA_CLASS':
-        'drf_spectacular.openapi.AutoSchema',    
+    "DEFAULT_PERMISSION_CLASSES": (
 
+        "rest_framework.permissions.IsAuthenticated",
+
+    ),
 }
 
+# REST_FRAMEWORK = {
+#     # Use Django's standard `django.contrib.auth` permissions,
+#     # or allow read-only access for unauthenticated users.
+#     # "DEFAULT_PERMISSION_CLASSES": [
+#     #     "rest_framework.permissions.DjangoModelPermissionsOrAnonReadOnly"
+#     # ],
+#     'DEFAULT_AUTHENTICATION_CLASSES': (
+#         'rest_framework_simplejwt.authentication.JWTAuthentication',
+#     ),
+
+#     'DEFAULT_PERMISSION_CLASSES': (
+#         #'rest_framework.permissions.IsAuthenticated',
+#        'rest_framework.permissions.AllowAny',
+
+#     ),
+
+#     'DEFAULT_SCHEMA_CLASS':
+#         'drf_spectacular.openapi.AutoSchema',    
+
+# }
+
+# SPECTACULAR_SETTINGS = {
+#     "TITLE": "SafeEdu API",
+#     "DESCRIPTION": "Documentação da API",
+#     "VERSION": "1.0.0",
+
+#     "SERVE_INCLUDE_SCHEMA": False,
+
+#     "COMPONENT_SPLIT_REQUEST": True,
+
+#     "SECURITY": [
+#         {
+#             "BearerAuth": []
+#         }
+#     ],
+
+#     "SECURITY_SCHEMES": {
+#         "BearerAuth": {
+#             "type": "http",
+#             "scheme": "bearer",
+#             "bearerFormat": "JWT",
+#         }
+#     },
+# }
+
 SPECTACULAR_SETTINGS = {
-    "TITLE": "SafeEdu API",
-    "DESCRIPTION": "Documentação da API",
+
+    "TITLE": "WorldSkils - API - GregMaster",
     "VERSION": "1.0.0",
 
+    "CONTACT": {
+        "name": "GregMaster",
+        "email": "prof.gregorio.queiroz@gmail.com",
+    },
+
+    "LICENSE": {
+        "name": "MIT",
+    },
+    "DESCRIPTION": """
+        # WorldSkils - SafeEdu API
+
+        API REST desenvolvida com Django REST Framework.
+
+        ---
+
+        ## Fluxo de autenticação
+
+        1. Faça login em `/api/auth/`
+
+        2. Copie o campo **access**
+
+        3. Clique em **Authorize**
+
+        4. Informe Bearer seu_access_token
+        5. Utilize normalmente os endpoints protegidos.
+        ## Endpoints
+        - Escolas
+        - Comentários
+        - Reações
+        - Imagens(Prints)
+        - MOTD
+    """
+        ,
     "SERVE_INCLUDE_SCHEMA": False,
 
     "COMPONENT_SPLIT_REQUEST": True,
+
+    "SWAGGER_UI_SETTINGS": {
+        "persistAuthorization": True,
+    },
+
+    "APPEND_COMPONENTS": {
+        "securitySchemes": {
+            "BearerAuth": {
+                "type": "http",
+                "scheme": "bearer",
+                "bearerFormat": "JWT",
+            }
+        }
+    },
 
     "SECURITY": [
         {
             "BearerAuth": []
         }
     ],
-
-    "SECURITY_SCHEMES": {
-        "BearerAuth": {
-            "type": "http",
-            "scheme": "bearer",
-            "bearerFormat": "JWT",
-        }
-    },
 }
+
+
+# DEBUGER https://www.jwt.io/
 SIMPLE_JWT = {
-    "ACCESS_TOKEN_LIFETIME": timedelta(hours=1),
+    "ACCESS_TOKEN_LIFETIME": timedelta(hours=24),
     "REFRESH_TOKEN_LIFETIME": timedelta(days=7),
 }
 
