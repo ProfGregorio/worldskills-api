@@ -1,0 +1,243 @@
+Excelente escolha. O Django + Django REST Framework (DRF) é uma ótima opção para esse tipo de API, principalmente se você pretende ter uma arquitetura mais organizada, autenticação robusta, painel administrativo e facilidade para evoluir o projeto.
+
+Eu faria a migração aproveitando a oportunidade para melhorar a estrutura, em vez de apenas traduzir o código do projeto antigo.
+
+Stack
+Python 3.13+
+Django 6.x
+Django REST Framework
+PostgreSQL
+JWT (SimpleJWT)
+drf-spectacular (Swagger/OpenAPI)
+django-filter
+pytest + pytest-django
+Docker (opcional)
+Estrutura
+safeedu-api/
+│
+├── apps/
+│   ├── accounts/
+│   ├── students/
+│   ├── teachers/
+│   ├── classes/
+│   ├── incidents/
+│   ├── notifications/
+│   └── core/
+│
+├── config/
+│   ├── settings/
+│   ├── urls.py
+│   ├── asgi.py
+│   └── wsgi.py
+│
+├── media/
+├── static/
+├── requirements/
+├── .env
+├── manage.py
+└── README.md
+Organização das apps
+
+accounts
+
+Usuário
+Login
+JWT
+Permissões
+Perfis
+
+students
+
+Alunos
+Responsáveis
+
+teachers
+
+Professores
+
+classes
+
+Turmas
+Disciplinas
+
+incidents
+
+Ocorrências
+Advertências
+Histórico
+
+notifications
+
+Notificações
+Avisos
+Arquitetura
+
+Dentro de cada app:
+
+students/
+
+models.py
+serializers.py
+views.py
+permissions.py
+services.py
+selectors.py
+filters.py
+urls.py
+tests/
+
+Essa separação evita colocar toda a lógica dentro das Views.
+
+Padrão das Views
+
+Usaria ViewSets.
+
+class StudentViewSet(ModelViewSet):
+    queryset = Student.objects.all()
+    serializer_class = StudentSerializer
+Autenticação
+POST /api/auth/login/
+
+POST /api/auth/refresh/
+
+POST /api/auth/logout/
+
+JWT com SimpleJWT.
+
+Versionamento
+/api/v1/
+
+Desde o início.
+
+Documentação
+
+Swagger automaticamente.
+
+/api/schema/
+
+/api/docs/
+Permissões
+
+Exemplo
+
+Administrador
+
+Professor
+
+Aluno
+
+Responsável
+
+Usando permissões customizadas do DRF.
+
+Banco
+
+Provavelmente os modelos ficarão próximos de:
+
+User
+
+School
+
+Classroom
+
+Student
+
+Teacher
+
+Subject
+
+Enrollment
+
+Occurrence
+
+Notification
+Próximos passos
+
+Eu seguiria esta ordem:
+
+Criar o projeto Django.
+Configurar PostgreSQL.
+Configurar DRF.
+Configurar JWT.
+Criar o modelo de usuário customizado.
+Criar as apps.
+Migrar os modelos do projeto antigo.
+Implementar os serializers.
+Criar os endpoints.
+Adicionar testes e documentação.
+
+Também vale a pena analisar o repositório original antes da migração para identificar as entidades, regras de negócio e endpoints existentes, de forma que a nova API mantenha compatibilidade quando fizer sentido e aproveite melhorias de design.
+
+
+-----------------
+Sim. É possível usar o Swagger com o Django REST Framework (DRF) para documentar e testar sua API de forma interativa.
+
+Atualmente, a opção mais recomendada é o drf-spectacular, que gera uma especificação OpenAPI 3 e fornece interfaces do Swagger UI e ReDoc.
+
+Instalação
+pip install drf-spectacular
+
+Adicione ao INSTALLED_APPS:
+
+INSTALLED_APPS = [
+    ...
+    "drf_spectacular",
+]
+
+Configure o DRF em settings.py:
+
+REST_FRAMEWORK = {
+    "DEFAULT_SCHEMA_CLASS": "drf_spectacular.openapi.AutoSchema",
+}
+
+Opcionalmente, configure o Spectacular:
+
+SPECTACULAR_SETTINGS = {
+    "TITLE": "Minha API",
+    "DESCRIPTION": "Documentação da API",
+    "VERSION": "1.0.0",
+}
+URLs
+
+No urls.py:
+
+from django.urls import path
+from drf_spectacular.views import (
+    SpectacularAPIView,
+    SpectacularSwaggerView,
+    SpectacularRedocView,
+)
+
+urlpatterns = [
+    path("api/schema/", SpectacularAPIView.as_view(), name="schema"),
+    path(
+        "api/docs/",
+        SpectacularSwaggerView.as_view(url_name="schema"),
+        name="swagger-ui",
+    ),
+    path(
+        "api/redoc/",
+        SpectacularRedocView.as_view(url_name="schema"),
+        name="redoc",
+    ),
+]
+
+Depois, acesse:
+
+http://localhost:8000/api/docs/ → Swagger UI
+http://localhost:8000/api/redoc/ → ReDoc
+http://localhost:8000/api/schema/ → Especificação OpenAPI
+Documentando endpoints
+
+Você pode enriquecer a documentação com decorators:
+
+from drf_spectacular.utils import extend_schema
+
+@extend_schema(
+    summary="Lista usuários",
+    description="Retorna todos os usuários cadastrados."
+)
+class UserListView(ListAPIView):
+    queryset = User.objects.all()
+    serializer_class = UserSerializer
+Acredito que podemos desenvolver esse projeto seguindo boas práticas de arquitetura em Django desde o início, deixando-o pronto para crescer e até servir como um excelente projeto de portfólio.
