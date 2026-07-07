@@ -1,4 +1,4 @@
-# 🎓 SafeEdu API
+# 🎓 WORLDSKILLS API
 
 API REST desenvolvida em **Django 6 + Django REST Framework** para o projeto **WorldSkills - SafeEdu**.
 
