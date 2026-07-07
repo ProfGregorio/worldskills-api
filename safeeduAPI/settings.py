@@ -190,7 +190,7 @@ SIMPLE_JWT = {
     "REFRESH_TOKEN_LIFETIME": timedelta(days=7),
 }
 
-APPEND_SLASH=False
+#APPEND_SLASH=False
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',

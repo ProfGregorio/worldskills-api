@@ -23,7 +23,7 @@ router.register(r"imagens", ImagemViewSet)
 urlpatterns = [
     path("", home, name="home"),
     path("health", health, name="health"),
-    path("api/", include(router.urls)),
+    path("api/", include(router.urls),  name="api"),
     path(
         "api/motd/",
         MotdAPIView.as_view(),
